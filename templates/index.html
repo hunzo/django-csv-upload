@@ -2,11 +2,37 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<div>
+<div class="mt-2">
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_table }}
-        <button type="submit">upload</button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-danger">UploadFile</button>
     </form>
+</div>
+<div class="mt-4">
+    <table class="table">
+        <thead>
+            <th>#id</th>
+            <th>name</th>
+            <th>ref-id</th>
+            <th>success count</th>
+            <th>created at</th>
+            <th>valid</th>
+            <th>invalid</th>
+        </thead>
+        <tbody>
+            {% for idx, file in file_upload %}
+            <tr>
+                <td>{{ idx|add:"1" }}</td>
+                <td>{{ file.name }}</td>
+                <td>{{ file.ref_id }}</td>
+                <td>{{ file.count }}</td>
+                <td>{{ file.created_at }}</td>
+                <td><a class="btn btn-primary btn-sm" href="{% url 'valid_download' %}?id={{ file.ref_id }}">Download</td>
+                <td><a class="btn btn-danger btn-sm" href="{% url 'invalid_download' %}?id={{ file.ref_id }}">Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

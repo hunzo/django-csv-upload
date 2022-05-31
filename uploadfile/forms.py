@@ -3,7 +3,8 @@ from .models import ErrorLogUpload, FileUpload
 
 
 class UploadForm(forms.Form):
-    file = forms.FileField()
+    file = forms.FileField(widget=forms.FileInput(attrs={"class" : "form-control"}))
+    name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"class": "form-control"}))
 
 
 class ErrorUploadForm(forms.ModelForm):

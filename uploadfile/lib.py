@@ -5,18 +5,27 @@ import chardet
 import csv
 
 
-def create_csv_file(email_validate_result):
+def create_csv_file(email_validate_result, validType):
     now = datetime.now().strftime("%Y%m%d-%H%M%S")
     respone = HttpResponse(content_type="text/csv")
-    respone["Content-Disposition"] = f"attachment; filename=invalid_email_format_{now}.csv"
+    respone["Content-Disposition"] = f"attachment; filename={validType}_email_format_{now}.csv"
 
     writer = csv.writer(respone)
-    writer.writerow(["line", "email", "error_message"])
 
-    for r in email_validate_result["invalid"]:
-        writer.writerow([r["line"], r["email"], r["error_message"]])
+    if validType == "valid":
+        for r in email_validate_result[validType]:
+            writer.writerow([r])
+        return respone
+    
+    if validType == "invalid":
+        writer.writerow(["line", "email", "error_message"])
 
-    return respone
+        for r in email_validate_result["invalid"]:
+            writer.writerow([r["line"], r["email"], r["error_message"]])
+            # print(r[""])
+        return respone
+
+    return None
 
 
 def check_email(email):
